@@ -1,0 +1,271 @@
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, .app-wrapper { height: 100%; }
+
+:root {
+  --red: #dc4c3e;
+  --header-text: #ffffff;
+  --sidebar-bg: #fefbf2;
+  --sidebar-text: #000000;
+  --count-color: #7e7d79;
+  --base-font: 14px;
+  --sidebar-width: 300px;
+  --max-content-width: 1200px;
+}
+
+html { font-size: var(--base-font); }
+
+body {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-size: 1rem; /* 14px */
+  color: #222;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+
+.site-header {
+  background: var(--red); /* #dc4c3e */
+  color: var(--header-text);
+  padding: 14px 16px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06) inset;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.menu-btn img { width: 22px; height: 22px; display: block; }
+
+.quick-find {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.14);
+  padding: 8px 10px;
+  border-radius: 6px;
+  max-width: 640px;
+  height: 36px;
+}
+
+.search-icon { width: 18px; height: 18px; margin-right: 10px; opacity: 0.95; }
+
+.quick-find input[type="text"] {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: rgba(255,255,255,0.95);
+  font-size: 0.95rem;
+  width: 100%;
+}
+.quick-find input::placeholder { color: rgba(255,255,255,0.75); }
+
+.header-right { margin-left: auto; display:flex; align-items:center; }
+.task-counter { color: var(--header-text); font-weight: 500; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr; /* 300px sidebar */
+  gap: 28px;
+  max-width: var(--max-content-width);
+  margin: 18px auto;
+  padding: 0 16px 40px;
+  align-items: start;
+}
+
+.sidebar {
+  background: var(--sidebar-bg); /* #fefbf2 */
+  padding: 20px;
+  border-radius: 8px;
+  color: var(--sidebar-text);
+  min-height: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.nav-item {}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  padding: 6px 8px;       
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+
+.nav-link:hover {
+  background: #ffffff;
+}
+
+.nav-link.nav-active { font-weight: 500; }
+
+.nav-icon { width: 28px; height: 28px; display: block; }
+.nav-label { display: block; }
+.nav-count { margin-left: auto; color: var(--count-color); font-size: 12px; line-height: 1; }
+
+.muted { color: #777; padding: 12px 0; }
+
+.main-content { min-width: 0; }
+
+.section-header h1 {
+  font-size: 20px; /* required */
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.section-divider {
+  border: none;
+  height: 1px;
+  background: #eee6e4;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.tasks-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* TASK ITEM + DIVIDER - use design divider color for consistency */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee6e4; /* 设计色，比 #ddd 更接近原稿 */
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+/* label should be positioning context for absolute checkbox */
+.task-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  padding: 6px;
+  border-radius: 6px;
+  position: relative; /* <- 必需：为绝对定位的 input 提供上下文 */
+}
+
+/* visually hide native checkbox but keep it accessible and clickable
+   - DO NOT set pointer-events: none
+   - keep a real width/height so it can receive focus & click events
+*/
+.task-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #d6d6d6;
+  display: inline-block;
+  flex: 0 0 auto;
+  position: relative;
+  transition: all .12s ease;
+  background: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-label input[type="checkbox"]:checked + .custom-checkbox {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.task-label input[type="checkbox"]:checked + .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.task-label input[type="checkbox"]:focus + .custom-checkbox {
+  outline: 3px solid rgba(220,76,62,0.16);
+  outline-offset: 2px;
+}
+
+.task-text {
+  font-size: 1rem;
+  color: #111;
+  line-height: 1.35;
+}
+
+@media (max-width: 480px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 12px;
+    padding: 0 12px 32px;
+  }
+
+  .sidebar { display: none; }
+
+  .header-inner { gap: 8px; }
+
+  .quick-find { max-width: none; height: 34px; padding: 6px 8px; }
+}
+
+.menu-btn:focus,
+.quick-find input:focus,
+.nav-link:focus,
+.task-label input[type="checkbox"]:focus + .custom-checkbox {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220,76,62,0.12);
+  border-radius: 6px;
+}
+
